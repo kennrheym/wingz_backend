@@ -15,8 +15,8 @@ class Ride(models.Model):
     status = models.CharField(
         choices=RideStatus.choices,
     )
-    id_rider = models.ForeignKey(User)
-    id_driver = models.ForeignKey(User)
+    id_rider = models.ForeignKey(User, on_delete=models.CASCADE)
+    id_driver = models.ForeignKey(User, on_delete=models.CASCADE)
     pickup_latitude = models.FloatField()
     pickup_longitude = models.FloatField()
     dropoff_latitude = models.FloatField()
@@ -24,6 +24,6 @@ class Ride(models.Model):
     pickup_time = models.DateTimeField()
 
 class RideEvent(models.Model):
-    id_ride = models.ForeignKey(Ride)
+    id_ride = models.ForeignKey(Ride, on_delete=models.CASCADE)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now=True)
