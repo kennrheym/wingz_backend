@@ -1,22 +1,28 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from .enums import UserRole, RideStatus
 
 # Create your models here.
-class User(models.Model):
+class User(AbstractUser):
     role = models.CharField(
         choices=UserRole.choices,
     )
-    first_name = models.TextField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.EmailField()
-    phone_number = models.IntegerField()
+    phone_number = models.CharField(max_length=25, unique=True)
 
 class Ride(models.Model):
     status = models.CharField(
         choices=RideStatus.choices,
     )
-    id_rider = models.ForeignKey(User, on_delete=models.CASCADE)
-    id_driver = models.ForeignKey(User, on_delete=models.CASCADE)
+    id_rider = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE,
+        related_name="id_rider"
+    )
+    id_driver = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE,
+        related_name="id_driver"
+    )
     pickup_latitude = models.FloatField()
     pickup_longitude = models.FloatField()
     dropoff_latitude = models.FloatField()
