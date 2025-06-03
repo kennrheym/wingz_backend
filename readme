@@ -1,1 +1,25 @@
-psql (PostgreSQL) 15.8
+# Setup
+1. Make sure you have the following installed:
+    a. python 3.10.0
+    b. postgresql 15.8
+
+2. Create virtual environment
+`python -m venv {venv_name}`
+
+3. Create database
+    a. Go into psql shell
+        `psql -U postgres;`
+    b. Create Database
+        `CREATE DATABASE wingz_local;`
+
+4. Install requirements
+`pip install -r requirements.txt`
+
+5. Run seeder
+`python manage.py seed_data_01 --users 10 --rides 20 --events 50`
+
+6. Run server
+python manage.py runserver
+
+# Entity Relationship Diagram
+https://dbdiagram.io/d/Wingz-683eb02b61dc3bf08d4c9e4a
