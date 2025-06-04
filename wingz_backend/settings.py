@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api',
-    'django_filters'
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +62,9 @@ REST_FRAMEWORK = {
      'DEFAULT_PERMISSION_CLASSES': [
         'api.permissions.IsAdminRole',
     ],
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
 }
 
 

@@ -15,10 +15,18 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+    
+class RideEventSerializer(serializers.ModelSerializer):
+    # id_ride = RideSerializer(read_only=True)
+
+    class Meta:
+        model = RideEvent
+        fields = ['id', 'id_ride', 'description', 'created_at']
 
 class RideSerializer(serializers.ModelSerializer):
     id_rider = UserSerializer(read_only=True)
     id_driver = UserSerializer(read_only=True)
+    ride_events = RideEventSerializer(source='rideevent_set', many=True, read_only=True)
 
     class Meta:
         model = Ride
@@ -31,13 +39,9 @@ class RideSerializer(serializers.ModelSerializer):
             'pickup_longitude',
             'dropoff_latitude',
             'dropoff_longitude',
-            'pickup_time'
+            'pickup_time',
+            'ride_events'
         ]
 
 
-class RideEventSerializer(serializers.ModelSerializer):
-    id_ride = RideSerializer(read_only=True)
 
-    class Meta:
-        model = RideEvent
-        fields = ['id', 'id_ride', 'description', 'created_at']
