@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import User, Ride, RideEvent
 from geopy.distance import geodesic
 from .enums import RideStatus
+from datetime import date
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -29,8 +31,8 @@ class RideSerializer(serializers.ModelSerializer):
     id_driver = UserSerializer(read_only=True)
     distance = serializers.SerializerMethodField()
 
-    ride_events = RideEventSerializer(source='rideevent_set', many=True, read_only=True)
-
+    # ride_events = RideEventSerializer(source='rideevent_set', many=True, read_only=True)
+    todays_ride_events = RideEventSerializer(source='rideevent_set', many=True, read_only=True)
     class Meta:
         model = Ride
         fields = [
@@ -43,8 +45,9 @@ class RideSerializer(serializers.ModelSerializer):
             'dropoff_latitude',
             'dropoff_longitude',
             'pickup_time',
-            'ride_events',
-            'distance'
+            # 'ride_events',
+            'distance',
+            'todays_ride_events'
         ]
     
     def get_distance(self, obj):
@@ -58,6 +61,11 @@ class RideSerializer(serializers.ModelSerializer):
             except Exception:
                 return None
         return None
+    
+    def get_todays_ride_events(self, obj):
+        today = date.today()
+        todays_events = obj.rideevent_set.filter(created_at__date=today)
+        return RideEventSerializer(todays_events, many=True).data
 
 
 
