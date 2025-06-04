@@ -79,6 +79,8 @@ class Command(BaseCommand):
 
         self.stdout.write("Creating ride events...")
         for _ in range(options['ride_events']):
+            # We only create a ride event when status is picked-up and update that even upon drop-off
+            # No event needed for EnRoute
             id_ride=random.choice(rides)
             if id_ride.status == RideStatus.PICKED_UP:
                 RideEvent.objects.create(
