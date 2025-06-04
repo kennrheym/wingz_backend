@@ -56,23 +56,40 @@ class Command(BaseCommand):
         rides = []
 
         for _ in range(options['rides']):
+            id_rider=random.choice(riders)
+            id_driver=random.choice(drivers)
+            pickup_latitude=fake.latitude()
+            pickup_longitude=fake.longitude()
+            dropoff_latitude=fake.latitude()
+            dropoff_longitude=fake.longitude()
+            pickup_time=fake.date_time_this_year(before_now=True, after_now=False, tzinfo=timezone.utc)
+            status=random.choice(ride_statuses)
+
             ride = Ride.objects.create(
-                id_rider=random.choice(riders),
-                id_driver=random.choice(drivers),
-                status=random.choice(ride_statuses),
-                pickup_latitude=fake.latitude(),
-                pickup_longitude=fake.longitude(),
-                dropoff_latitude=fake.latitude(),
-                dropoff_longitude=fake.longitude(),
-                pickup_time=fake.date_time_this_year(before_now=True, after_now=False, tzinfo=timezone.utc)
+                id_rider=id_rider,
+                id_driver=id_driver,
+                status=status,
+                pickup_latitude=pickup_latitude,
+                pickup_longitude=pickup_longitude,
+                dropoff_latitude=dropoff_latitude,
+                dropoff_longitude=dropoff_longitude,
+                pickup_time=pickup_time if status != RideStatus.EN_ROUTE else None
             )
             rides.append(ride)
 
         self.stdout.write("Creating ride events...")
         for _ in range(options['ride_events']):
-            RideEvent.objects.create(
-                id_ride=random.choice(rides),
-                description=fake.text(max_nb_chars=120)
-            )
+            id_ride=random.choice(rides)
+            if id_ride.status == RideStatus.PICKED_UP:
+                RideEvent.objects.create(
+                    id_ride=id_ride,
+                    description="Status changed to picked-up"
+                )
+            if id_ride.status == RideStatus.DROPPED_OFF:
+
+                RideEvent.objects.create(
+                    id_ride=id_ride,
+                    description="Status changed to dropped-off"
+                )
 
         self.stdout.write(self.style.SUCCESS("✅ Database seeding complete!"))
