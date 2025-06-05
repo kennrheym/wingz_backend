@@ -36,9 +36,15 @@ class Command(BaseCommand):
 
         for _ in range(options['users']):
             role = random.choice(roles)
+            firt_name=fake.first_name()
+            last_name=fake.last_name()
+            username = f"{firt_name.lower()}.{last_name.lower()}"
+            email = f"{username}@gmail.com"
             user = User.objects.create_user(
-                username=fake.unique.user_name(),
-                email=fake.unique.email(),
+                first_name=firt_name,
+                last_name=last_name,
+                username=username,
+                email=email,
                 phone_number=fake.unique.msisdn(),
                 password='password123',
                 role=role
