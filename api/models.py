@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .enums import UserRole, RideStatus
+from django.utils import timezone
 
 # Create your models here.
 class User(AbstractUser):
@@ -27,9 +28,9 @@ class Ride(models.Model):
     pickup_longitude = models.FloatField()
     dropoff_latitude = models.FloatField()
     dropoff_longitude = models.FloatField()
-    pickup_time = models.DateTimeField(auto_created=True, null=True)
+    pickup_time = models.DateTimeField(default=timezone.now, null=True, blank=True)
 
 class RideEvent(models.Model):
     id_ride = models.ForeignKey(Ride, on_delete=models.CASCADE)
     description = models.TextField()
-    created_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(default=timezone.now)
