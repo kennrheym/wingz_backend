@@ -16,7 +16,7 @@
 `pip install -r requirements.txt`
 
 5. Run seeder
-`python manage.py seed_data_01 --users 10 --rides 20 --events 50`
+`python manage.py seed_data_01 --users 10 --rides 1000`
 
 6. Run server
 python manage.py runserver
