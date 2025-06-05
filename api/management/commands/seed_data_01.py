@@ -11,6 +11,8 @@ import random
 
 from api.models import User, Ride, RideEvent
 from api.enums import UserRole, RideStatus
+from datetime import datetime, timedelta
+
 
 fake = Faker()
 
@@ -20,7 +22,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--users', type=int, default=10)
         parser.add_argument('--rides', type=int, default=20)
-        parser.add_argument('--ride_events', type=int, default=50)
+        # parser.add_argument('--ride_events', type=int, default=50)
 
     def handle(self, *args, **options):
         self.stdout.write("Deleting existing data...")
@@ -78,20 +80,27 @@ class Command(BaseCommand):
             rides.append(ride)
 
         self.stdout.write("Creating ride events...")
-        for _ in range(options['ride_events']):
-            # We only create a ride event when status is picked-up and update that even upon drop-off
-            # No event needed for EnRoute
-            id_ride=random.choice(rides)
+        # When a ride is created, it just changes status. But upon changing status, ride_events are created.
+        # So when a ride reaches a dropped-off status, 2 ride_events would have been created.
+        # Also, we only create a ride_event when status is PICKED-UP or DROPPED-OFF
+        for id_ride in rides:
             if id_ride.status == RideStatus.PICKED_UP:
                 RideEvent.objects.create(
                     id_ride=id_ride,
                     description="Status changed to picked-up"
                 )
-            if id_ride.status == RideStatus.DROPPED_OFF:
 
+            if id_ride.status == RideStatus.DROPPED_OFF:
                 RideEvent.objects.create(
                     id_ride=id_ride,
-                    description="Status changed to dropped-off"
+                    description="Status changed to picked-up",
+                    created_at=id_ride.pickup_time
+                    
+                )
+                RideEvent.objects.create(
+                    id_ride=id_ride,
+                    description="Status changed to dropped-off",
+                    created_at=id_ride.pickup_time + timedelta(hours=random.choice([0.5, 1, 2, 3, 4]))
                 )
 
         self.stdout.write(self.style.SUCCESS("✅ Database seeding complete!"))
