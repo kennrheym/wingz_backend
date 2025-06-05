@@ -40,7 +40,7 @@ python manage.py createsuperuser
 python manage.py migrate
 
 ## Run Seeder file
-python manage.py seed_data_01 --users 10 --rides 1000
+python manage.py seed_data_01 --users 20 --rides 1000
 
 ## Run Django server
 python manage.py runserver
