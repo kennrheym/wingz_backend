@@ -30,9 +30,8 @@ class RideSerializer(serializers.ModelSerializer):
     id_rider = UserSerializer(read_only=True)
     id_driver = UserSerializer(read_only=True)
     distance = serializers.SerializerMethodField()
-
-    # ride_events = RideEventSerializer(source='rideevent_set', many=True, read_only=True)
     todays_ride_events = RideEventSerializer(source='rideevent_set', many=True, read_only=True)
+    
     class Meta:
         model = Ride
         fields = [
@@ -45,7 +44,6 @@ class RideSerializer(serializers.ModelSerializer):
             'dropoff_latitude',
             'dropoff_longitude',
             'pickup_time',
-            # 'ride_events',
             'distance',
             'todays_ride_events'
         ]
