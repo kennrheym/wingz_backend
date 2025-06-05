@@ -1,6 +1,6 @@
 SELECT
-  TO_CHAR(r.pickup_time, 'YYYY-MM') AS month,
-  CONCAT(a.first_name, ' ', a.last_name) AS full_name,
+  TO_CHAR(r.pickup_time, 'YYYY-MM') AS "Month",
+  CONCAT(a.first_name, ' ', a.last_name) AS "Driver",
   COUNT(
     CASE
       WHEN EXTRACT(EPOCH FROM (re.created_at - r.pickup_time)) > 3600
@@ -21,6 +21,6 @@ GROUP BY
   a.last_name,
   TO_CHAR(r.pickup_time, 'YYYY-MM')
 ORDER BY
-  full_name,
-  month,
+  "Driver",
+  "Month",
   r.id_driver_id;
