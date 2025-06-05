@@ -1,25 +1,49 @@
-# Setup
-1. Make sure you have the following installed:
-    a. python 3.10.0
-    b. postgresql 15.8
+# Project Setup
 
-2. Create virtual environment
-`python -m venv {venv_name}`
+Follow these steps to get the project up and running locally.
 
-3. Create database
-    a. Go into psql shell
-        `psql -U postgres;`
-    b. Create Database
-        `CREATE DATABASE wingz_local;`
+---
 
-4. Install requirements
-`pip install -r requirements.txt`
+## Prerequisites
 
-5. Run seeder
-`python manage.py seed_data_01 --users 10 --rides 1000`
+Make sure the following are installed on your system:
 
-6. Run server
+- **Python** 3.10.0  
+- **PostgreSQL** 15.8
+
+---
+
+## Create and Activate Virtual Environment
+
+```bash
+python -m venv .venv
+source .venv/bin/activate     # On Windows: .venv\Scripts\activate
+
+## Create Local Database
+psql -U postgres;
+CREATE DATABASE wingz_local;
+
+## Create an env file and fill database variables
+DB_NAME=wingz_local
+DB_USER=postgres
+DB_PASSWORD= 
+DB_HOST=localhost
+DB_PORT=5432
+
+## Install Django requirements
+pip install -r requirements.txt
+
+## Create a superuser
+python manage.py createsuperuser
+
+## Migrate models
+python manage.py migrate
+
+## Run Seeder file
+python manage.py seed_data_01 --users 10 --rides 1000
+
+## Run Django server
 python manage.py runserver
 
-# Entity Relationship Diagram
+## Entity Relationship Diagram
 https://dbdiagram.io/d/Wingz-683eb02b61dc3bf08d4c9e4a
