@@ -12,15 +12,15 @@ FROM
 JOIN
   api_rideevent re ON r.id = re.id_ride_id
 JOIN
-  api_user a ON a.id = r.id_driver_id
+	api_user a ON a.id = r.id_driver_id
 WHERE
-  r."status" = 'DroppedOff'
+	r."status" = 'DroppedOff'
 GROUP BY
-  r.id_driver_id,
-  a.first_name,
-  a.last_name,
-  TO_CHAR(r.pickup_time, 'YYYY-MM')
+	r.id_driver_id,
+	a.first_name,
+	a.last_name,
+	TO_CHAR(r.pickup_time, 'YYYY-MM')
 ORDER BY
-  "Driver",
-  "Month",
+ 	"Month" DESC,
+	"Driver",
   r.id_driver_id;
